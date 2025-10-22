@@ -18,16 +18,15 @@ if not ACCOUNT_ADDRESS or not SECRET_KEY:
     st.error("Adicione suas chaves MAINNET em Settings > Secrets!")
     st.stop()
 
-# === CONEXÃO CORRETA (SEM user_state) ===
+# === CONEXÃO ===
 info = Info(constants.MAINNET_API_URL, skip_ws=True)
 
-# === SALDO E POSIÇÕES (MÉTODO CORRETO) ===
+# === PREÇO BTC (CORRIGIDO) ===
 try:
-    # Usa all_mids + open_orders para simular estado
     mids = info.all_mids()
-    btc_price = mids.get("BTC", 0)
+    btc_price_str = mids.get("BTC", "0")
+    btc_price = float(btc_price_str)  # Converte string para float
 
-    # Simula saldo (em produção, use exchange para trades)
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Status", "ONLINE")
     col2.metric("ROI Mensal", "+12.3%")

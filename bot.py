@@ -10,8 +10,10 @@ import pytz
 from datetime import datetime, timedelta
 
 # === CHAVES VIA SECRETS ===
-ACCOUNT_ADDRESS = st.secrets["ACCOUNT_ADDRESS"]
-SECRET_KEY = st.secrets["SECRET_KEY"]
+import os
+
+ACCOUNT_ADDRESS = os.environ["ACCOUNT_ADDRESS"]
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 info = Info(constants.MAINNET_API_URL, skip_ws=True)
 exchange = Exchange(ACCOUNT_ADDRESS, SECRET_KEY, base_url=constants.MAINNET_API_URL)

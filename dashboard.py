@@ -3,7 +3,6 @@ import streamlit as st
 import pandas as pd
 import json
 import glob
-import os
 from hyperliquid.info import Info
 from hyperliquid.utils import constants
 
@@ -11,38 +10,39 @@ st.set_page_config(page_title="Kakaroto Albatross v3.0", layout="wide")
 st.title("Kakaroto Albatross v3.0")
 st.markdown("**Fibonacci 3:33 AM NY + NASDAQ 9:36/9:45 Sync | MAINNET | ROI +147%/ano**")
 
-# Suas chaves (seguras via Secrets)
-ACCOUNT_ADDRESS = st.secrets.get("ACCOUNT_ADDRESS", "0xTEST")
-SECRET_KEY = st.secrets.get("SECRET_KEY", "0xTEST")
-if ACCOUNT_ADDRESS == "0xTEST":
+# === CHAVES VIA SECRETS ===
+ACCOUNT_ADDRESS = st.secrets.get("ACCOUNT_ADDRESS")
+SECRET_KEY = st.secrets.get("SECRET_KEY")
+
+if not ACCOUNT_ADDRESS or not SECRET_KEY:
     st.error("Adicione suas chaves MAINNET em Settings > Secrets!")
     st.stop()
 
-info = Info(
-    base_url=constants.MAINNET_API_URL,
-    skip_ws=True,
-    user_address=ACCOUNT_ADDRESS,
-    private_key=SECRET_KEY)
+# === CONEXÃO CORRETA ===
+info = Info(constants.MAINNET_API_URL, skip_ws=True)
 
-# Métricas principais
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("Status", "ONLINE")
-col2.metric("ROI Mensal", "+12.3%")
-col3.metric("Win Rate", "40.1%")
-col4.metric("Profit Factor", "3.12")
-
-# Saldo da conta
+# === SALDO E POSIÇÕES ===
 try:
     user_state = info.user_state(ACCOUNT_ADDRESS)
+    asset_positions = user_state.get("assetPositions", [])
+    withdrawable = user_state.get("withdrawable", 0)
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Status", "ONLINE")
+    col2.metric("ROI Mensal", "+12.3%")
+    col3.metric("Win Rate", "40.1%")
+    col4.metric("Profit Factor", "3.12")
+
     col5, col6 = st.columns(2)
-    col5.metric("Saldo Disponível", f"${user_state.get('withdrawable', 0):,.2f}")
-    col6.metric("Posições Abertas", len(user_state.get('assetPositions', [])))
-except:
-    st.warning("Erro ao conectar. Verifique chaves.")
+    col5.metric("Saldo Disponível", f"${withdrawable:,.2f}")
+    col6.metric("Posições Abertas", len(asset_positions))
 
+except Exception as e:
+    st.error(f"Erro ao conectar: {e}")
+    st.stop()
+
+# === HISTÓRICO DE VERSÕES ===
 st.divider()
-
-# Histórico de Versões
 st.subheader("Histórico de Versões")
 versions = []
 for file in glob.glob("versions/*.json"):
@@ -63,7 +63,7 @@ if versions:
 else:
     st.info("Execute backtest.py para gerar versões.")
 
-# Últimos Trades
+# === ÚLTIMOS TRADES ===
 st.subheader("Últimos Trades")
 if 'trades' not in st.session_state:
     st.session_state.trades = pd.DataFrame([
@@ -72,7 +72,7 @@ if 'trades' not in st.session_state:
 st.dataframe(st.session_state.trades)
 st.download_button("Baixar CSV", st.session_state.trades.to_csv(index=False), "kakaroto_trades.csv")
 
-# Sidebar
+# === SIDEBAR ===
 st.sidebar.success("""
 **v3.0 Kakaroto Edition**
 - NASDAQ Power Hours: 9:36 e 9:45 NY

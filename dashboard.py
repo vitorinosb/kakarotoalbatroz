@@ -18,7 +18,12 @@ if ACCOUNT_ADDRESS == "0xTEST":
     st.error("Adicione suas chaves MAINNET em Settings > Secrets!")
     st.stop()
 
-info = Info(constants.MAINNET_API_URL, skip_ws=True)
+info = Info(
+    base_url=constants.MAINNET_API_URL,
+    skip_ws=True,
+    user_address=ACCOUNT_ADDRESS,
+    private_key=SECRET_KEY
+)
 
 # Métricas principais
 col1, col2, col3, col4 = st.columns(4)

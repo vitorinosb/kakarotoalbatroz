@@ -18,7 +18,7 @@ if ACCOUNT_ADDRESS == "0xTEST":
     st.error("Adicione suas chaves Testnet em Settings > Secrets!")
     st.stop()
 
-info = Info(constants.TESTNET_API_URL, skip_ws=True)
+info = Info(constants.MAINNET_API_URL, skip_ws=True)
 
 # Métricas principais
 col1, col2, col3, col4 = st.columns(4)

@@ -15,7 +15,7 @@ st.markdown("**Fibonacci 3:33 AM NY + NASDAQ 9:36/9:45 Sync | MAINNET | ROI +147
 ACCOUNT_ADDRESS = st.secrets.get("ACCOUNT_ADDRESS", "0xTEST")
 SECRET_KEY = st.secrets.get("SECRET_KEY", "0xTEST")
 if ACCOUNT_ADDRESS == "0xTEST":
-    st.error("Adicione suas chaves Testnet em Settings > Secrets!")
+    st.error("Adicione suas chaves MAINNET em Settings > Secrets!")
     st.stop()
 
 info = Info(constants.MAINNET_API_URL, skip_ws=True)

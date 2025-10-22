@@ -9,7 +9,7 @@ from hyperliquid.utils import constants
 
 st.set_page_config(page_title="Kakaroto Albatross v3.0", layout="wide")
 st.title("Kakaroto Albatross v3.0")
-st.markdown("**Fibonacci 3:33 AM NY + NASDAQ 9:36/9:45 Sync | Testnet | ROI +147%/ano**")
+st.markdown("**Fibonacci 3:33 AM NY + NASDAQ 9:36/9:45 Sync | MAINNET | ROI +147%/ano**")
 
 # Suas chaves (seguras via Secrets)
 ACCOUNT_ADDRESS = st.secrets.get("ACCOUNT_ADDRESS", "0xTEST")
